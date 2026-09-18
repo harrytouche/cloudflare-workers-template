@@ -1,6 +1,8 @@
 This skill ("grill-me") is vendored unmodified from:
 
   https://github.com/mattpocock/skills
+  commit c55ee46073ed923f86ce59a5eb3b6d895095d1b7
+  path: skills/productivity/grill-me
 
 Copyright (c) 2026 Matt Pocock. Licensed under the MIT License;
 see LICENSE in this directory for the full text.
