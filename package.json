@@ -1,0 +1,13 @@
+{
+  "name": "cloudflare-workers-template",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Baseline static site template deployed via Cloudflare Workers static assets",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.132.0"
+  }
+}
