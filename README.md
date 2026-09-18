@@ -6,8 +6,8 @@ Baseline template for a static site deployed on Cloudflare Workers (static asset
 
 - `public/` — the site itself: `index.html`, `style.css`, `main.js`, `_headers`. No build step — Cloudflare serves this directory directly.
 - `wrangler.jsonc` — Workers static-assets config.
-- `.claude/skills/grill-me/` — interview-driven requirements stress-testing before you build.
-- `.claude/skills/ponytail/` — enforces the simplest working solution (YAGNI ladder) on coding tasks. Third-party skill, MIT licensed — see `.claude/skills/ponytail/NOTICE`.
+- `.claude/skills/grill-me/` and `.claude/skills/grilling/` — interview-driven requirements stress-testing before you build (`grill-me` is a thin alias that invokes `grilling`). Third-party skills from [mattpocock/skills](https://github.com/mattpocock/skills), MIT licensed — see the `NOTICE` in each directory.
+- `.claude/skills/ponytail/` — enforces the simplest working solution (YAGNI ladder) on coding tasks. Third-party skill from [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail), MIT licensed — see `.claude/skills/ponytail/NOTICE`.
 - `CLAUDE.md` — agent instructions for active development (currently: always surface Cloudflare preview links).
 
 ## Prerequisites

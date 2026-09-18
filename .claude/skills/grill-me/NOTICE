@@ -1,0 +1,9 @@
+This skill ("grill-me") is vendored unmodified from:
+
+  https://github.com/mattpocock/skills
+
+Copyright (c) 2026 Matt Pocock. Licensed under the MIT License;
+see LICENSE in this directory for the full text.
+
+Note: grill-me is a thin alias that invokes the "grilling" skill
+(see ../grilling), also vendored from the same source.
