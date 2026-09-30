@@ -6,5 +6,7 @@
   "assets": {
     "directory": "./public",
     "not_found_handling": "404-page"
-  }
+  },
+  // Required by `wrangler preview`. Empty: no vars, secrets or bindings to isolate.
+  "previews": {}
 }

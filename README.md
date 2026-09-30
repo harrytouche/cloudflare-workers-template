@@ -36,6 +36,19 @@ npm run deploy
 3. **Custom domain** (optional): Workers & Pages → your Worker → Settings → Domains & Routes → add your domain. Once a custom domain is attached, consider setting `workers_dev: false` in `wrangler.jsonc` so only the custom domain serves production traffic — until then, `workers_dev: true` is what gives you a working `*.workers.dev` URL out of the box.
 4. `preview_urls: true` keeps per-branch `*.workers.dev` preview links working for PRs regardless of the `workers_dev` setting above.
 
+## Previews
+
+Non-production branches deploy as [Workers Previews](https://developers.cloudflare.com/workers/previews/) via `npx wrangler preview` (needs Wrangler ≥ 4.135.0).
+
+- **`previews: {}` is empty on purpose:** this is a static-assets-only Worker with no vars, secrets or bindings, so there's nothing to isolate from production. If you add any, give `previews` its own sandbox/test values — vars and bindings are *not* inherited.
+- **Preview names come from the branch name**, sanitised (non-alphanumerics such as `/` become `-`, lowercased) and truncated if long.
+- **Dashboard (one-time):** Worker → Settings → Builds → deploy command `npx wrangler deploy`; non-production branch command `npx wrangler preview`; keep "Builds for non-production branches" on.
+- **Previews on a custom domain** (optional, once production has one): add to `wrangler.jsonc`
+  ```jsonc
+  "routes": [{ "pattern": "<PROD_HOST>", "custom_domain": true, "previews_enabled": true }]
+  ```
+  then Worker → Domains → set `<PROD_HOST>` to "Production and Preview". Previews are then served at `<preview-name>.<PROD_HOST>` (only after that config is merged and deployed to production). Caveats: Cloudflare creates a wildcard `*.<PROD_HOST>` record and certificate, so use a dedicated host (e.g. `previews.example.com`) if `<PROD_HOST>` already has subdomains; deeper hostnames may need Advanced Certificate Manager / Total TLS; custom-domain previews do **not** get `X-Robots-Tag: noindex` automatically, unlike `workers.dev` ones.
+
 ## License
 
 MIT — see `LICENSE`.
