@@ -2,9 +2,9 @@
 export default {
   fetch(request, env) {
     const { pathname } = new URL(request.url);
-    if (pathname !== "/api" && !pathname.startsWith("/api/")) {
-      return new Response("Not found", { status: 404 });
+    if (pathname === "/api/placeholder_route") {
+      return Response.json({ placeholder_variable: env.placeholder_variable });
     }
-    return Response.json({ path: pathname, placeholder_variable: env.placeholder_variable });
+    return new Response("Not found", { status: 404 });
   },
 };
