@@ -40,7 +40,7 @@ npm run deploy
 
 Non-production branches deploy as [Workers Previews](https://developers.cloudflare.com/workers/previews/) via `npx wrangler preview` (needs Wrangler ≥ 4.135.0).
 
-- **`previews: {}` is empty on purpose:** this is a static-assets-only Worker with no vars, secrets or bindings, so there's nothing to isolate from production. If you add any, give `previews` its own sandbox/test values — vars and bindings are *not* inherited.
+- **`previews` holds preview-only values:** vars and bindings are *not* inherited from the top level, so every one must be repeated in `previews` with sandbox/test values (see `placeholder_variable`, a demo var you can delete). Never point a preview at production data.
 - **Preview names come from the branch name**, sanitised (non-alphanumerics such as `/` become `-`, lowercased) and truncated if long.
 - **Dashboard (one-time):** Worker → Settings → Builds → deploy command `npx wrangler deploy`; non-production branch command `npx wrangler preview`; keep "Builds for non-production branches" on.
 - **Previews on a custom domain** (optional, once production has one): add to `wrangler.jsonc`
