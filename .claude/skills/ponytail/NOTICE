@@ -1,8 +1,0 @@
-This skill ("ponytail") is vendored unmodified from:
-
-  https://github.com/DietrichGebert/ponytail
-  commit e3ba2aa6f1e6f0bc4d69eb09c9f0d0a93af56156
-  path: skills/ponytail
-
-Copyright (c) 2026 DietrichGebert. Licensed under the MIT License;
-see LICENSE in this directory for the full text.
