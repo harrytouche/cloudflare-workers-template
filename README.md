@@ -68,7 +68,7 @@ Responses: 200 sent, 400 validation, 403 Turnstile failed, 502 send failed. Prev
 **One-time setup (dashboard, not in git):**
 
 1. **Email Routing:** your domain → **Email** → **Email Routing** → enable it, then under **Destination addresses** add and verify the inbox that should receive messages. `send_email` only delivers to verified destinations.
-2. **Turnstile:** **Turnstile** → **Add widget** → add `<PROD_HOST>` (and your preview host pattern if Turnstile fails on previews), mode **Managed**. Put the **site key** in `data-sitekey` in `public/index.html`. It's public by design. The default `1x00000000000000000000AA` is Cloudflare's always-pass test key and will fail verification against a real secret.
+2. **Turnstile:** **Turnstile** → **Add widget** → add `<PROD_HOST>`, mode **Managed**. A hostname automatically covers its subdomains, so previews at `<preview-name>.<PROD_HOST>` work too; only `*.workers.dev` hosts would need adding separately. Put the **site key** in `data-sitekey` in `public/index.html`. It's public by design. The default `1x00000000000000000000AA` is Cloudflare's always-pass test key and will fail verification against a real secret.
 3. **Worker secrets:** Worker → Settings → Variables and secrets, type **Secret** (plain-text dashboard vars get wiped by `wrangler deploy`):
    - `CONTACT_TO`: the verified inbox from step 1
    - `CONTACT_FROM`: any address on your Email Routing domain (e.g. `noreply@example.com`). No mailbox is needed.
@@ -90,14 +90,14 @@ Not using the form? Delete it from `public/index.html` and `public/main.js`, the
 
 Use [Cloudflare Access](https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/self-hosted-public-app/) to keep previews private while production stays public (or private too). Everything is in the dashboard under **Zero Trust** (first visit sets up a team name and the free plan).
 
-1. **Login method:** Zero Trust → Integrations → Identity providers. The default **One-time PIN** (emailed code) is enough; add GitHub/Google if you prefer.
+1. **Login method:** Zero Trust → Integrations → Identity providers. **One-time PIN** (a code emailed to you) is the easiest and needs no setup. **Google** sign-in is an easy alternative if you'd rather not wait for emails: add it as a Google identity provider with an OAuth client from Google Cloud Console.
 2. **Previews application:** Zero Trust → Access controls → Applications → **Create new application** → **Self-hosted**.
    - Name: `<site> previews`; destination hostname: `*.<PROD_HOST>` (wildcard subdomain). The wildcard covers both preview URLs and deployment URLs.
-   - Policy: **Allow**, include **Emails** = your address (or an email domain / group for a team). Everyone else is denied: Access applications are deny-by-default.
+   - Policy: **Allow**, include **Emails** = your address. Everyone else is denied, because Access applications are deny-by-default.
 3. **Production application:** a second self-hosted application for `<PROD_HOST>`:
    - **Public site:** policy action **Bypass**, include **Everyone**. Requests skip Access entirely, but the hostname now has an explicit application, which the deny-all setting in step 4 requires.
    - **Private site:** policy action **Allow** with the same rule as previews.
-4. **Deny all by default (recommended):** Zero Trust → Access controls → **Access settings** → turn on **Block traffic to all domains in this account** ([docs](https://developers.cloudflare.com/cloudflare-one/access-controls/access-settings/require-access-protection/)). Any hostname without an Access application is then blocked with Error 1050, so a new Worker, preview host or DNS record can't go live publicly by accident. **Before turning it on**, make sure every hostname that should stay reachable (including other sites in the account) has an application with an Allow or Bypass policy, or is listed under **Hostnames to Exempt**. Keep exemptions to genuinely public content.
+4. **Deny all by default (recommended, once per account):** this setting covers every hostname in the account, not just this project. Once it's on, each new project only needs steps 2 and 3. Zero Trust → Access controls → **Access settings** → turn on **Block traffic to all domains in this account** ([docs](https://developers.cloudflare.com/cloudflare-one/access-controls/access-settings/require-access-protection/)). Any hostname without an Access application is then blocked with Error 1050, so a new Worker, preview host or DNS record can't go live publicly by accident. **Before turning it on**, make sure every hostname that should stay reachable (including other sites in the account) has an application with an Allow or Bypass policy, or is listed under **Hostnames to Exempt**. Keep exemptions to genuinely public content.
 5. **Verify:** in a private window, a preview URL should show the Access login page and `<PROD_HOST>` should load (or prompt, if private). A hostname you never added should show Error 1050.
 
 `workers.dev` URLs aren't on your zone, so neither the applications above nor the deny-all setting covers them. Turn them off (see [Custom domain](#custom-domain-production-and-previews), step 3), or use Worker → Settings → Domains & Routes → **Enable Cloudflare Access** on them.
