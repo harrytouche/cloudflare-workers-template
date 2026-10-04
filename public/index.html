@@ -10,6 +10,22 @@
   <h1>Hello world</h1>
   <p>This site is deployed on Cloudflare Workers static assets.</p>
   <p><a href="https://github.com/harrytouche/cloudflare-workers-template">cloudflare-workers-template</a></p>
+
+  <h2>Get in touch</h2>
+  <form class="contact-form">
+    <label for="contact-name">Name</label>
+    <input type="text" id="contact-name" name="name" required maxlength="100" autocomplete="name" />
+    <label for="contact-email">Email</label>
+    <input type="email" id="contact-email" name="email" required maxlength="254" autocomplete="email" />
+    <label for="contact-message">Message</label>
+    <textarea id="contact-message" name="message" required maxlength="5000" rows="5"></textarea>
+    <!-- Replace with your Turnstile site key (public by design). This dummy key always passes. -->
+    <div class="cf-turnstile" data-sitekey="1x00000000000000000000AA"></div>
+    <button type="submit">Send message</button>
+  </form>
+  <p class="contact-status" role="status" hidden></p>
+
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
   <script src="/main.js"></script>
 </body>
 </html>

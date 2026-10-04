@@ -2,6 +2,7 @@
   "name": "my-cloudflare-site",
   "main": "src/index.js",
   "compatibility_date": "2026-09-18",
+  // Set both to false once a custom domain is attached (README → Custom domain).
   "workers_dev": true,
   "preview_urls": true,
   "assets": {
@@ -9,13 +10,25 @@
     "not_found_handling": "404-page",
     "run_worker_first": ["/api/*"]
   },
+  // Custom domain, with previews served at <preview-name>.<PROD_HOST>. Uncomment and
+  // replace <PROD_HOST> (README → Custom domain).
+  // "routes": [
+  //   { "pattern": "<PROD_HOST>", "custom_domain": true, "previews_enabled": true }
+  // ],
   "vars": {
     "placeholder_variable": "value in prod"
   },
+  // Contact form (README → Contact form). Unrestricted binding; the Worker passes the
+  // destination (CONTACT_TO secret), which must be a verified Email Routing address.
+  "send_email": [{ "name": "SEND_EMAIL" }],
   // Required by `wrangler preview`. Vars and bindings are not inherited, so repeat them here with preview values.
   "previews": {
     "vars": {
-      "placeholder_variable": "value in preview"
-    }
-  }
+      "placeholder_variable": "value in preview",
+      "SHOW_SEND_ERRORS": "1"
+    },
+    "send_email": [{ "name": "SEND_EMAIL" }]
+  },
+  // Persists console.error output to the Worker's Logs tab.
+  "observability": { "enabled": true }
 }
